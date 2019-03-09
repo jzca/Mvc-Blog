@@ -2,30 +2,86 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+@section scripts {
+    <script>
+        $("span.menu").click(function () {
+            $(".top-menu ul").slideToggle("slow", function () {
+            });
+        });
+    </script>
+}
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+<div class="content">
+    <div class="container">
+        <div class="content-grids">
+            <div class="col-md-8 content-main">
+                <div class="content-grid">
+                    <div class="content-grid-info">
+                        <img src="~/images/post1.jpg" alt="" />
+                        <div class="post-info">
+                            <h4><a href="@Url.Action("Single", "Home")">Lorem ipsum dolor sit amet</a>  July 30, 2014 / 27 Comments</h4>
+                            <p>Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis.</p>
+                            <a href="@Url.Action("Single", "Home")"><span></span>READ MORE</a>
+                        </div>
+                    </div>
+                    <div class="content-grid-info">
+                        <img src="~/images/post2.jpg" alt="" />
+                        <div class="post-info">
+                            <h4><a href="@Url.Action("Single", "Home")">Lorem ipsum dolor sit amet</a>  July 30, 2014 / 27 Comments</h4>
+                            <p>Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis.</p>
+                            <a href="@Url.Action("Single", "Home")"><span></span>READ MORE</a>
+                        </div>
+                    </div>
+                    <div class="content-grid-info">
+                        <img src="~/images/post3.jpg" alt="" />
+                        <div class="post-info">
+                            <h4><a href="@Url.Action("Single", "Home")">Lorem ipsum dolor sit amet</a>  July 30, 2014 / 27 Comments</h4>
+                            <p>Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis.</p>
+                            <a href="@Url.Action("Single", "Home")"><span></span>READ MORE</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-4 content-right">
+                <div class="recent">
+                    <h3>RECENT POSTS</h3>
+                    <ul>
+                        <li><a href="#">Aliquam tincidunt mauris</a></li>
+                        <li><a href="#">Vestibulum auctor dapibus  lipsum</a></li>
+                        <li><a href="#">Nunc dignissim risus consecu</a></li>
+                        <li><a href="#">Cras ornare tristiqu</a></li>
+                    </ul>
+                </div>
+                <div class="comments">
+                    <h3>RECENT COMMENTS</h3>
+                    <ul>
+                        <li><a href="#">Amada Doe </a> on <a href="#">Hello World!</a></li>
+                        <li><a href="#">Peter Doe </a> on <a href="#"> Photography</a></li>
+                        <li><a href="#">Steve Roberts  </a> on <a href="#">HTML5/CSS3</a></li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+                <div class="archives">
+                    <h3>ARCHIVES</h3>
+                    <ul>
+                        <li><a href="#">October 2013</a></li>
+                        <li><a href="#">September 2013</a></li>
+                        <li><a href="#">August 2013</a></li>
+                        <li><a href="#">July 2013</a></li>
+                    </ul>
+                </div>
+                <div class="categories">
+                    <h3>CATEGORIES</h3>
+                    <ul>
+                        <li><a href="#">Vivamus vestibulum nulla</a></li>
+                        <li><a href="#">Integer vitae libero ac risus e</a></li>
+                        <li><a href="#">Vestibulum commo</a></li>
+                        <li><a href="#">Cras iaculis ultricies</a></li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
     </div>
 </div>

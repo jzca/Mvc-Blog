@@ -1,0 +1,16 @@
+﻿
+@model DetailPostViewModel
+
+@{
+    ViewBag.Title = "Detail";
+}
+
+<h2>Details</h2>
+
+<p>@Model.Title</p>
+<p>@Html.Raw(Model.Body)</p>
+<div class="row">
+    <div class="col-md-2">
+        <img class="img-responsive" src="@Url.Content(Model.MediaUrl)" />
+    </div>
+</div>

@@ -26,5 +26,11 @@ namespace MvcBlog.Controllers
 
             return View();
         }
+        public ActionResult Single()
+        {
+            ViewBag.Message = "Your blog page.";
+            return View();
+        }
+
     }
 }
