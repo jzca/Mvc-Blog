@@ -214,6 +214,7 @@
     <Content Include="js\easing.js" />
     <Content Include="js\jquery.min.js" />
     <Content Include="js\move-top.js" />
+    <Content Include="js\myJs.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />

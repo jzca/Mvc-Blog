@@ -12,10 +12,11 @@
             $(".top-menu ul").slideToggle("slow", function () {
             });
         });
+        //$(".post-body-short").text.slice(0, 20);
     </script>
 }
 
-@if (false)
+@if (!Model.Any())
 {
     <div style="margin-top:15px;">
         <p><strong>You have no posts</strong></p>
@@ -31,20 +32,23 @@ else
                         @foreach (var record in Model)
                         {
                         <div class="content-grid-info">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <img class="img-responsive" src="@Url.Content(record.MediaUrl)"/>
+                            @if (record.MediaUrl != null)
+                            {
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img class="img-responsive" src="@Url.Content(record.MediaUrl)" />
+                                    </div>
+                                </div>
+                            }
+                                <div class="post-info">
+                                    <h4><a href="@Url.Action("Detail", "Post" , new { id = record.Id })">@record.Title</a>@record.DateCreated.ToString("HH:mm dddd - MMMM dd yyyy")  / 27 Comments</h4>
+                                    <p class="post-body-short">@Html.Raw(record.BodySliced)</p>
+                                    <a href="@Url.Action("Detail", "Post" , new { id = record.Id })"><span></span>READ MORE</a>
                                 </div>
                             </div>
-                            <div class="post-info">
-                                <h4><a href="@Url.Action("Detail", "Post" , new { id = record.Id })">@record.Title</a>@record.DateCreated  / 27 Comments</h4>
-                                <p>@Html.Raw(record.Body)</p>
-                                <a href="@Url.Action("Detail", "Post" , new { id = record.Id })"><span></span>READ MORE</a>
-                            </div>
-                        </div>
                         }
                     </div>
-                    </div>
+                </div>
 
                 <div class="col-md-4 content-right">
                     <div class="recent">
@@ -69,7 +73,7 @@ else
                         <ul>
                             @foreach (var record in Model)
                             {
-                                <li><a href="@Url.Action("Detail", "Post" , new { id = record.Id })">@record.DateCreated.ToString("dddd, MMMM dd yyyy HH:mm")</a></li>
+                                <li><a href="@Url.Action("Detail", "Post" , new { id = record.Id })">@record.DateCreated.ToString("HH:mm dddd - MMMM dd yyyy")</a></li>
                             }
                         </ul>
                     </div>

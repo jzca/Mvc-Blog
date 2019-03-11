@@ -24,10 +24,10 @@ namespace MvcBlog.Controllers
         {
             ViewBag.Message = "Your home page.";
 
-            var appUserId = User.Identity.GetUserId();
+            //var appUserId = User.Identity.GetUserId();
+                //.Where(p => p.UserId == appUserId)
 
             var model = DbContext.Posts
-                .Where(p => p.UserId == appUserId)
                 .Select(p => new IndexHomeViewModel
                 {
                     Id = p.Id,

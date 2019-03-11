@@ -14,6 +14,9 @@ namespace PostDatabase.Controllers
     public class PostController : Controller
     {
         private ApplicationDbContext DbContext;
+        private string fileExtensionForSavingPost;
+
+        private Post postForSavingPost;
 
         public PostController()
         {
@@ -37,7 +40,7 @@ namespace PostDatabase.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -68,42 +71,41 @@ namespace PostDatabase.Controllers
                 return View();
             }
 
-            string fileExtension;
+
 
             //Validating file upload
             if (formData.Media != null)
             {
-                fileExtension = Path.GetExtension(formData.Media.FileName);
+                fileExtensionForSavingPost = Path.GetExtension(formData.Media.FileName);
 
-                if (!ImgHandler.AllowedFileExtensions.Contains(fileExtension))
+                if (!ImgHandler.AllowedFileExtensions.Contains(fileExtensionForSavingPost))
                 {
                     ModelState.AddModelError("", "File extension is not allowed.");
                     return View();
                 }
             }
 
-            Post post;
 
             if (!id.HasValue)
             {
-                post = new Post();
-                post.UserId = appUserId;
-                post.DateCreated = DateTime.Now;
-                DbContext.Posts.Add(post);
+                postForSavingPost = new Post();
+                postForSavingPost.UserId = appUserId;
+                postForSavingPost.DateCreated = DateTime.Now;
+                DbContext.Posts.Add(postForSavingPost);
             }
             else
             {
-                post = DbContext.Posts.FirstOrDefault(
+                postForSavingPost = DbContext.Posts.FirstOrDefault(
                p => p.Id == id && p.UserId == appUserId);
 
-                if (post == null)
+                if (postForSavingPost == null)
                 {
                     return RedirectToAction(nameof(PostController.Index));
                 }
             }
 
-            post.Title = formData.Title;
-            post.Body = formData.Body;
+            postForSavingPost.Title = formData.Title;
+            postForSavingPost.Body = formData.Body;
 
 
             //Handling file upload
@@ -119,7 +121,7 @@ namespace PostDatabase.Controllers
 
                 formData.Media.SaveAs(fullPathWithName);
 
-                post.MediaUrl = ImgHandler.ImgUploadFolder + fileName;
+                postForSavingPost.MediaUrl = ImgHandler.ImgUploadFolder + fileName;
             }
 
 
@@ -129,6 +131,7 @@ namespace PostDatabase.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (!id.HasValue)
@@ -153,7 +156,7 @@ namespace PostDatabase.Controllers
             post.Body = post.Body;
             post.DateUpdated = DateTime.Now;
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]
@@ -193,8 +196,8 @@ namespace PostDatabase.Controllers
             var appUserId = User.Identity.GetUserId();
 
             var post = DbContext.Posts.FirstOrDefault(p =>
-            p.Id == id.Value &&
-            p.UserId == appUserId);
+            p.Id == id.Value);
+            //&&p.UserId == appUserId);
 
             if (post == null)
                 return RedirectToAction(nameof(PostController.Index));
@@ -207,20 +210,5 @@ namespace PostDatabase.Controllers
             return View(model);
         }
 
-        //private void PopulateViewBag()
-        //{
-        //    var categories = new SelectList(
-        //                          new List<string>
-        //                          {
-        //                              "Drama",
-        //                              "Comedy",
-        //                              "Horror",
-        //                              "Romance",
-        //                              "Sci-fi",
-        //                              "Adventure"
-        //                          });
-
-        //    ViewBag.Categories = categories;
-        //}
     }
 }
