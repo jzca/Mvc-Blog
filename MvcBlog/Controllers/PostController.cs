@@ -106,7 +106,7 @@ namespace PostDatabase.Controllers
 
             postForSavingPost.Title = formData.Title;
             postForSavingPost.Body = formData.Body;
-
+            postForSavingPost.DateUpdated = DateTime.Now;
 
             //Handling file upload
             if (formData.Media != null)
@@ -151,10 +151,8 @@ namespace PostDatabase.Controllers
 
             var model = new CreateEditPostViewModel();
 
-
-            post.Title = post.Title;
-            post.Body = post.Body;
-            post.DateUpdated = DateTime.Now;
+            model.Title = post.Title;
+            model.Body = post.Body;
 
             return View(model);
         }

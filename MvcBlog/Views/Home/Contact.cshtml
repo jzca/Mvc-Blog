@@ -3,14 +3,14 @@
 }
 
 @section scripts {
-<script type="text/javascript">
-    jQuery(document).ready(function ($) {
-        $(".scroll").click(function (event) {
-            event.preventDefault();
-            $('html,body').animate({ scrollTop: $(this.hash).offset().top }, 900);
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $(".scroll").click(function (event) {
+                event.preventDefault();
+                $('html,body').animate({ scrollTop: $(this.hash).offset().top }, 900);
+            });
         });
-    });
-</script>
+    </script>
 }
 
 <div class="contact-content">
@@ -21,28 +21,31 @@
         </div>
         <div class="contact-details">
             <form>
-                <input type="text" placeholder="Name" required />
-                <input type="text" placeholder="Email" required />
-                <input type="text" placeholder="Phone" required />
-                <input type="text" placeholder="City Name" required />
-                <textarea placeholder="Message"></textarea>
-                <input type="submit" value="SEND" />
+                <div>
+                    <input type="text" placeholder="Name" required />
+                    <input type="text" placeholder="Email" required />
+                </div>
+                <div>
+                    <input type="text" placeholder="Phone" required />
+                    <input type="text" placeholder="City Name" required />
+                </div>
+                <div>
+                    <textarea placeholder="Message"></textarea>
+                </div>
+                    <input type="submit" value="SEND" />
             </form>
         </div>
         <div class="contact-details">
             <div class="col-md-6 contact-map">
-                <h4>FIND US HERE</h4>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d803187.8113675824!2d-120.11910914056458!3d38.15292455846902!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornia%2C+USA!5e0!3m2!1sen!2sin!4v1423829283333" frameborder="0" style="border:0"></iframe>
+                <h4>FIND ME HERE</h4>
+                <iframe src="https://maps.google.com/maps?q=Manitoba%20Institute%20of%20Trades%20and%20Technology%20130%20Henlow%20Bay%2C%20Winnipeg%2C%20MB%20R3Y%201G4&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" style="border:0"></iframe>
             </div>
             <div class="col-md-6 company_address">
                 <h4>GET IN TOUCH</h4>
-                <p>500 Lorem Ipsum Dolor Sit,</p>
-                <p>22-56-2-9 Sit Amet, Lorem,</p>
-                <p>USA</p>
-                <p>Phone:(00) 222 666 444</p>
-                <p>Fax: (000) 123 456 78 0</p>
-                <p>Email: <a href="mailto:info@example.com">info@mycompany.com</a></p>
-                <p>Follow on: <a href="#">Facebook</a>, <a href="#">Twitter</a></p>
+                <p>Winnipeg</p>
+                <p>MB,</p>
+                <p>Canada</p>
+                <p>Email: <a href="#">toBeUpdated</a></p>
             </div>
             <div class="clearfix"></div>
         </div>
