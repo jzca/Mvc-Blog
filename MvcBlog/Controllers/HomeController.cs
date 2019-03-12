@@ -51,6 +51,9 @@ namespace MvcBlog.Controllers
         {
             ViewBag.Message = "Your contact page.";
 
+            //var eService = new MvcBlog.Models.EmailService();
+            //eService.Send("test-to@test.com", "this is the body", "subject is CS 2");
+
             return View();
         }
 
