@@ -13,8 +13,8 @@
     @*<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" defer></script>*@
     <!--end slider -->
     <!--script-->
-    <script src="~/js/move-top.js" defer></script>
-    <script src="~/js/easing.js" defer></script>
+    <script src="~/Scripts/js/move-top.js" defer></script>
+    <script src="~/Scripts/js/easing.js" defer></script>
     <script type="application/x-javascript" defer> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
     @Scripts.Render("~/bundles/jquery")
     <script type="text/javascript" defer>
@@ -39,21 +39,15 @@
             </div>
             <!---start-top-nav---->
             <div class="top-menu">
-                <div class="search">
-                    <form>
-                        <input type="text" placeholder="" required="">
-                        <input type="submit" value="" />
-                    </form>
-                </div>
                 <span class="menu"> </span>
                 <ul>
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Posts", "Index", "Post")</li>
-                    @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>*@
-                    @*<div class="clearfix"> </div>*@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Post Management", "Index", "Post")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -78,8 +72,6 @@
             <p>&copy; @DateTime.Now.Year All rights reserved | Designed by <a target="_blank" href="http://w3layouts.com/">W3layouts</a></p>
         </div>
     </div>
-
-    @*@Scripts.Render("~/bundles/bootstrap")*@
     @RenderSection("scripts", required: false)
 </body>
 

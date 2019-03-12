@@ -70,15 +70,6 @@ namespace MvcBlog.Migrations
                 userManager.AddToRole(adminUser.Id, "Admin");
             }
 
-            //var roleManager =
-            //    new RoleManager<IdentityRole>(
-            //        new RoleStore<IdentityRole>(context));
-
-            ////UserManager, used to manage users
-            //var userManager =
-            //    new UserManager<ApplicationUser>(
-            //            new UserStore<ApplicationUser>(context));
-
             //Adding mod role if it doesn't exist.
             if (!context.Roles.Any(p => p.Name == "Moderator"))
             {
@@ -111,6 +102,12 @@ namespace MvcBlog.Migrations
                 userManager.AddToRole(moderatorUser.Id, "Moderator");
             }
 
+            //Adding mod role if it doesn't exist.
+            if (!context.Roles.Any(p => p.Name == "Moderator"))
+            {
+                var modRole = new IdentityRole("Moderator");
+                roleManager.Create(modRole);
+            }
 
             //  This method will be called after migrating to the latest version.
 

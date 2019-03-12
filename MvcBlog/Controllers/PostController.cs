@@ -14,6 +14,7 @@ namespace PostDatabase.Controllers
     public class PostController : Controller
     {
         private ApplicationDbContext DbContext;
+
         private string fileExtensionForSavingPost;
 
         private Post postForSavingPost;
