@@ -6,47 +6,6 @@
     ViewBag.Title = "Home Page";
 }
 
-@section scripts {
-    <script src="~/Scripts/jquery.dotdotdot.min.js"></script>
-    <script defer>
-        document.addEventListener("DOMContentLoaded", () => {
-            let wrapper = document.querySelector(".post-info p");
-            new Dotdotdot(wrapper, {
-
-                callback: function (isTruncated) { },
-                /* Function invoked after truncating the text.
-                   Inside this function, "this" refers to the wrapper. */
-
-                ellipsis: "\u2026 ",
-                /* The text to add as ellipsis. */
-
-                height: 20,
-                /* The (max-)height for the wrapper:
-                   null: measure the CSS (max-)height ones;
-                   a number: sets a specific height in pixels;
-                   "watch": re-measures the CSS (max-)height in the "watch". */
-
-                keep: null,
-                /* Query selector for elements to keep after the ellipsis. */
-
-                tolerance: 0,
-                /* Deviation for the measured wrapper height. */
-
-                truncate: "word",
-                /* How to truncate the text: "node", "word" or "letter". */
-
-                watch: "window",
-                /* Whether to update the ellipsis:
-                   true: Monitors the wrapper width and height;
-                   "window": Monitors the window width and height. */
-
-            });
-        });
-            //$("post-info > p").slice(0, 20);
-
-    </script>
-}
-
 @if (!Model.Any())
 {
     <div style="margin-top:15px;">
@@ -73,7 +32,14 @@ else
                                 }
                                 <div class="post-info">
                                     <h4><a href="@Url.Action("Detail", "Post" , new { id = record.Id })">@record.Title</a>@record.DateCreated.ToString("HH:mm dddd - MMMM dd yyyy")  / 0 Comments</h4>
-                                    <p class="body-sm">@Html.Raw(record.Body)</p>
+                                    @if (record.Body.Length >= 180)
+                                    {
+                                        <p>@Html.Raw(record.Body.Substring(0, 180)) &#9986;&#9986;&#9986;</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@Html.Raw(record.Body)</p>
+                                    }
                                     <a href="@Url.Action("Detail", "Post" , new { id = record.Id })"><span></span>READ MORE</a>
                                 </div>
                             </div>

@@ -212,8 +212,6 @@
     <Content Include="images\post2.jpg" />
     <Content Include="images\post3.jpg" />
     <Content Include="images\search.png" />
-    <Content Include="Scripts\jquery.dotdotdot.js" />
-    <Content Include="Scripts\jquery.dotdotdot.min.js" />
     <Content Include="Scripts\js\easing.js" />
     <Content Include="Scripts\js\move-top.js" />
     <Content Include="Scripts\js\myJs.js" />
