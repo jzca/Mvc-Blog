@@ -8,7 +8,7 @@ namespace MvcBlog
     public class ImgHandler
     {
         public static readonly List<string> AllowedFileExtensions =
-        new List<string> { ".jpg", ".jpeg", ".png" };
+        new List<string> { ".jpg", ".jpeg", ".png","gif" };
 
         public static readonly string ImgUploadFolder = "~/ImgUpload/";
 

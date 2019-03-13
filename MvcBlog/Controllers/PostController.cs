@@ -77,7 +77,7 @@ namespace PostDatabase.Controllers
             //Validating file upload
             if (formData.Media != null)
             {
-                fileExtensionForSavingPost = Path.GetExtension(formData.Media.FileName);
+                fileExtensionForSavingPost = Path.GetExtension(formData.Media.FileName).ToLower();
 
                 if (!ImgHandler.AllowedFileExtensions.Contains(fileExtensionForSavingPost))
                 {
@@ -143,7 +143,7 @@ namespace PostDatabase.Controllers
             var appUserId = User.Identity.GetUserId();
 
             var post = DbContext.Posts.FirstOrDefault(
-                p => p.Id == id && p.UserId == appUserId);
+                p => p.Id == id.Value && p.UserId == appUserId);
 
             if (post == null)
             {
@@ -154,6 +154,7 @@ namespace PostDatabase.Controllers
 
             model.Title = post.Title;
             model.Body = post.Body;
+            model.MediaUrl = post.MediaUrl;
 
             return View(model);
         }

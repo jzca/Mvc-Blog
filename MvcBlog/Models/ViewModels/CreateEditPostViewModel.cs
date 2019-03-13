@@ -14,5 +14,6 @@ namespace MvcBlog.Models.ViewModels
         [AllowHtml]
         public string Body { get; set; }
         public HttpPostedFileBase Media { get; set; }
+        public string MediaUrl { get; set; }
     }
 }
