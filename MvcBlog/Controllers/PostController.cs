@@ -34,7 +34,7 @@ namespace PostDatabase.Controllers
                 {
                     Id = p.Id,
                     Title = p.Title,
-                    Body=p.Body
+                    Body = p.Body
                 }).ToList();
 
             return View(model);
@@ -208,6 +208,29 @@ namespace PostDatabase.Controllers
             model.MediaUrl = post.MediaUrl;
 
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult DetailByTitle(string title)
+        {
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                return RedirectToAction(nameof(PostController.Index));
+            }
+            var appUserId = User.Identity.GetUserId();
+
+            var post = DbContext.Posts.FirstOrDefault(p =>
+                p.Title == title);
+
+            if (post == null)
+                return RedirectToAction(nameof(PostController.Index));
+
+            var model = new DetailPostViewModel();
+            model.Title = post.Title;
+            model.Body = post.Body;
+            model.MediaUrl = post.MediaUrl;
+
+            return View("Detail", model);
         }
 
     }

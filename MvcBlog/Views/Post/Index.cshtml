@@ -46,7 +46,7 @@ else
                     <td>@record.Title</td>
                     <td>@record.Body</td>
                     <td>
-                        <a href="@Url.Action("Detail", "Post", new { id = record.Id })">Detail</a>
+                        <a href="@Url.Action("DetailByTitle", "Post", new { title = record.Title})">Detail</a>
                     </td>
                     <td>
                         <a href="@Url.Action("Edit", "Post", new { id = record.Id })">Edit</a>
