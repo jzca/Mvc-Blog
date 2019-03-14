@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using MvcBlog.Models;
+using Owin.Security.Providers.GitHub;
 
 namespace MvcBlog
 {
@@ -46,23 +47,18 @@ namespace MvcBlog
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
             // Uncomment the following lines to enable logging in with third party login providers
+
             app.UseMicrosoftAccountAuthentication(
                 clientId: "1acd5538-4540-4776-8a94-3f496f3a42e8",
                 clientSecret: "H_4b($#|To$!.$}WbD)GI:[{;Y:s{Bt7(lz^p^ZV[H8!i%A{|[%Q{h]j:");
-
-            //app.UseTwitterAuthentication(
-            //   consumerKey: "",
-            //   consumerSecret: "");
-
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
                 ClientId = "695608062776-nv5tctt8fnfu2dcpor6vjcn7qkc80os3.apps.googleusercontent.com",
                 ClientSecret = "dv2gIXZ15bGuWa2LP4jdvLSe"
             });
+
+            app.UseGitHubAuthentication("0f92e934ef63e824e797", "77c1caa59b104bebb515e8e21abce5d58994cec3");
         }
     }
 }
