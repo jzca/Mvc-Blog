@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace MvcBlog.Models.Domain
@@ -20,10 +21,7 @@ namespace MvcBlog.Models.Domain
 
         public string MediaUrl { get; set; }
 
-        //public Post()
-        //{
-        //    DateCreated = DateTime.Now;
-        //}
+        public string Slug { get; set; }
 
     }
 }

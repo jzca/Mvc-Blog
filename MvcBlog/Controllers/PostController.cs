@@ -30,208 +30,232 @@ namespace PostDatabase.Controllers
 
             var model = DbContext.Posts
                 .Where(p => p.UserId == appUserId)
+                .OrderBy(p=> p.Published)
                 .Select(p => new IndexPostViewModel
                 {
                     Id = p.Id,
                     Title = p.Title,
-                    Body = p.Body
-                }).ToList();
+                    Body = p.Body,
+                    Published = p.Published
+        }).ToList();
 
             return View(model);
-        }
+    }
 
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public ActionResult Create()
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public ActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public ActionResult Create(CreateEditPostViewModel formData)
+    {
+        return SavePost(null, formData);
+    }
+
+    private ActionResult SavePost(int? id, CreateEditPostViewModel formData)
+    {
+        if (!ModelState.IsValid)
         {
             return View();
         }
 
-        [HttpPost]
-        public ActionResult Create(CreateEditPostViewModel formData)
+        var appUserId = User.Identity.GetUserId();
+
+        if (DbContext.Posts.Any(p => p.UserId == appUserId &&
+        p.Title == formData.Title &&
+        (!id.HasValue || p.Id != id.Value)))
         {
-            return SavePost(null, formData);
+            ModelState.AddModelError(nameof(CreateEditPostViewModel.Title),
+                "Post title should be unique");
+
+            return View();
         }
 
-        private ActionResult SavePost(int? id, CreateEditPostViewModel formData)
+
+
+        //Validating file upload
+        if (formData.Media != null)
         {
-            if (!ModelState.IsValid)
+            fileExtensionForSavingPost = Path.GetExtension(formData.Media.FileName).ToLower();
+
+            if (!ImgHandler.AllowedFileExtensions.Contains(fileExtensionForSavingPost))
             {
+                ModelState.AddModelError("", "File extension is not allowed.");
                 return View();
             }
-
-            var appUserId = User.Identity.GetUserId();
-
-            if (DbContext.Posts.Any(p => p.UserId == appUserId &&
-            p.Title == formData.Title &&
-            (!id.HasValue || p.Id != id.Value)))
-            {
-                ModelState.AddModelError(nameof(CreateEditPostViewModel.Title),
-                    "Post title should be unique");
-
-                return View();
-            }
-
-
-
-            //Validating file upload
-            if (formData.Media != null)
-            {
-                fileExtensionForSavingPost = Path.GetExtension(formData.Media.FileName).ToLower();
-
-                if (!ImgHandler.AllowedFileExtensions.Contains(fileExtensionForSavingPost))
-                {
-                    ModelState.AddModelError("", "File extension is not allowed.");
-                    return View();
-                }
-            }
-
-
-            if (!id.HasValue)
-            {
-                postForSavingPost = new Post();
-                postForSavingPost.UserId = appUserId;
-                postForSavingPost.DateCreated = DateTime.Now;
-                DbContext.Posts.Add(postForSavingPost);
-            }
-            else
-            {
-                postForSavingPost = DbContext.Posts.FirstOrDefault(
-               p => p.Id == id && p.UserId == appUserId);
-
-                if (postForSavingPost == null)
-                {
-                    return RedirectToAction(nameof(PostController.Index));
-                }
-            }
-
-            postForSavingPost.Title = formData.Title;
-            postForSavingPost.Body = formData.Body;
-            postForSavingPost.DateUpdated = DateTime.Now;
-
-            //Handling file upload
-            if (formData.Media != null)
-            {
-                if (!Directory.Exists(ImgHandler.MappedUploadFolder))
-                {
-                    Directory.CreateDirectory(ImgHandler.MappedUploadFolder);
-                }
-
-                var fileName = formData.Media.FileName;
-                var fullPathWithName = ImgHandler.MappedUploadFolder + fileName;
-
-                formData.Media.SaveAs(fullPathWithName);
-
-                postForSavingPost.MediaUrl = ImgHandler.ImgUploadFolder + fileName;
-            }
-
-
-            DbContext.SaveChanges();
-
-            return RedirectToAction(nameof(PostController.Index));
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public ActionResult Edit(int? id)
+
+        if (!id.HasValue)
         {
-            if (!id.HasValue)
-            {
-                return RedirectToAction(nameof(PostController.Index));
-            }
-
-            var appUserId = User.Identity.GetUserId();
-
-            var post = DbContext.Posts.FirstOrDefault(
-                p => p.Id == id.Value && p.UserId == appUserId);
-
-            if (post == null)
-            {
-                return RedirectToAction(nameof(PostController.Index));
-            }
-
-            var model = new CreateEditPostViewModel();
-
-            model.Title = post.Title;
-            model.Body = post.Body;
-            model.MediaUrl = post.MediaUrl;
-
-            return View(model);
+            postForSavingPost = new Post();
+            postForSavingPost.UserId = appUserId;
+            postForSavingPost.DateCreated = DateTime.Now;
+            postForSavingPost.Published = formData.Published;
+            DbContext.Posts.Add(postForSavingPost);
         }
-
-        [HttpPost]
-        public ActionResult Edit(int id, CreateEditPostViewModel formData)
+        else
         {
-            return SavePost(id, formData);
-        }
+            postForSavingPost = DbContext.Posts.FirstOrDefault(
+           p => p.Id == id && p.UserId == appUserId);
 
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public ActionResult Delete(int? id)
-        {
-            if (!id.HasValue)
+            if (postForSavingPost == null)
             {
                 return RedirectToAction(nameof(PostController.Index));
             }
+        }
 
-            var appUserId = User.Identity.GetUserId();
+        postForSavingPost.Title = formData.Title;
+        postForSavingPost.Body = formData.Body;
+        postForSavingPost.DateUpdated = DateTime.Now;
+        postForSavingPost.Published = formData.Published;
 
-            var Post = DbContext.Posts.FirstOrDefault(p => p.Id == id && p.UserId == appUserId);
-
-            if (Post != null)
+        //Handling file upload
+        if (formData.Media != null)
+        {
+            if (!Directory.Exists(ImgHandler.MappedUploadFolder))
             {
-                DbContext.Posts.Remove(Post);
-                DbContext.SaveChanges();
+                Directory.CreateDirectory(ImgHandler.MappedUploadFolder);
             }
 
-            return RedirectToAction(nameof(PostController.Index));
+            var fileName = formData.Media.FileName;
+            var fullPathWithName = ImgHandler.MappedUploadFolder + fileName;
+
+            formData.Media.SaveAs(fullPathWithName);
+
+            postForSavingPost.MediaUrl = ImgHandler.ImgUploadFolder + fileName;
         }
 
-        [HttpGet]
-        public ActionResult Detail(int? id)
-        {
-            if (!id.HasValue)
-                return RedirectToAction(nameof(PostController.Index));
 
-            var appUserId = User.Identity.GetUserId();
+        DbContext.SaveChanges();
 
-            var post = DbContext.Posts.FirstOrDefault(p =>
-            p.Id == id.Value);
-            //&&p.UserId == appUserId);
-
-            if (post == null)
-                return RedirectToAction(nameof(PostController.Index));
-
-            var model = new DetailPostViewModel();
-            model.Title = post.Title;
-            model.Body = post.Body;
-            model.MediaUrl = post.MediaUrl;
-
-            return View(model);
-        }
-
-        [HttpGet]
-        public ActionResult DetailByTitle(string title)
-        {
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                return RedirectToAction(nameof(PostController.Index));
-            }
-            var appUserId = User.Identity.GetUserId();
-
-            var post = DbContext.Posts.FirstOrDefault(p =>
-                p.Title == title);
-
-            if (post == null)
-                return RedirectToAction(nameof(PostController.Index));
-
-            var model = new DetailPostViewModel();
-            model.Title = post.Title;
-            model.Body = post.Body;
-            model.MediaUrl = post.MediaUrl;
-
-            return View("Detail", model);
-        }
-
+        return RedirectToAction(nameof(PostController.Index));
     }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public ActionResult Edit(int? id)
+    {
+        if (!id.HasValue)
+        {
+            return RedirectToAction(nameof(PostController.Index));
+        }
+
+        var appUserId = User.Identity.GetUserId();
+
+        var post = DbContext.Posts.FirstOrDefault(
+            p => p.Id == id.Value && p.UserId == appUserId);
+
+        if (post == null)
+        {
+            return RedirectToAction(nameof(PostController.Index));
+        }
+
+        var model = new CreateEditPostViewModel();
+
+        model.Title = post.Title;
+        model.Body = post.Body;
+        model.MediaUrl = post.MediaUrl;
+        model.Published = post.Published;
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public ActionResult Edit(int id, CreateEditPostViewModel formData)
+    {
+        return SavePost(id, formData);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public ActionResult Delete(int? id)
+    {
+        if (!id.HasValue)
+        {
+            return RedirectToAction(nameof(PostController.Index));
+        }
+
+        var appUserId = User.Identity.GetUserId();
+
+        var Post = DbContext.Posts.FirstOrDefault(p => p.Id == id && p.UserId == appUserId);
+
+        if (Post != null)
+        {
+            DbContext.Posts.Remove(Post);
+            DbContext.SaveChanges();
+        }
+
+        return RedirectToAction(nameof(PostController.Index));
+    }
+
+    [HttpGet]
+    public ActionResult Detail(int? id)
+    {
+        if (!id.HasValue)
+            return RedirectToAction(nameof(PostController.Index));
+
+        var appUserId = User.Identity.GetUserId();
+
+        var post = DbContext.Posts.FirstOrDefault(p =>
+        p.Id == id.Value);
+        //&&p.UserId == appUserId);
+
+        if (post == null)
+            return RedirectToAction(nameof(PostController.Index));
+
+        var model = new DetailPostViewModel();
+        model.Title = post.Title;
+        model.Body = post.Body;
+        model.MediaUrl = post.MediaUrl;
+
+        return View(model);
+    }
+
+    //[HttpGet]
+    //[Route("blog/{slug}")]
+    //public ActionResult DetailByTitle(string slug)
+    //{
+    //    if (string.IsNullOrWhiteSpace(slug))
+    //    {
+    //        return RedirectToAction(nameof(PostController.Index));
+    //    }
+    //    var appUserId = User.Identity.GetUserId();
+
+    //    var post = DbContext.Posts.FirstOrDefault(p =>
+    //        p.Slug == slug);
+
+    //    if (post == null)
+    //        return RedirectToAction(nameof(PostController.Index));
+
+    //    var model = new DetailPostViewModel();
+    //    model.Slug = post.Slug;
+    //    model.Title = post.Title;
+    //    model.Body = post.Body;
+    //    model.MediaUrl = post.MediaUrl;
+
+    //    return View("Detail", model);
+    //}
+
 }
+}
+
+/*
+ 
+        public string Slug
+        {
+            get
+            {
+                return string.Join("-", RmSpeChar(Title).Split(' '));
+            }
+        }
+
+        public static string RmSpeChar(string str)
+        {
+            return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+        }
+     
+     */

@@ -14,7 +14,6 @@ namespace MvcBlog.Models.ViewModels
 
         public string MediaUrl { get; set; }
 
-        //public bool Published { get; set; }
         public DateTime DateCreated { get; set; }
 
     }

@@ -13,12 +13,7 @@ namespace MvcBlog
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
-             name: "DetailByTitlePost",
-             url: "blog/{title}",
-            defaults: new { controller = "Post", action = "DetailByTitle", id = UrlParameter.Optional }
-            );
-
+            routes.MapMvcAttributeRoutes();
 
             routes.MapRoute(
                 name: "Default",

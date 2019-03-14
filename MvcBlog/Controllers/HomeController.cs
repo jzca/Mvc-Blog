@@ -25,16 +25,18 @@ namespace MvcBlog.Controllers
             ViewBag.Message = "Your home page.";
 
             //var appUserId = User.Identity.GetUserId();
-                //.Where(p => p.UserId == appUserId)
+            //.Where(p => p.UserId == appUserId)
 
             var model = DbContext.Posts
+                .Where(p => p.Published)
+                .OrderByDescending(p=>p.DateCreated)
                 .Select(p => new IndexHomeViewModel
                 {
                     Id = p.Id,
                     Title = p.Title,
                     Body = p.Body,
-                    DateCreated=p.DateCreated,
-                    MediaUrl=p.MediaUrl
+                    DateCreated = p.DateCreated,
+                    MediaUrl = p.MediaUrl,
                 }).ToList();
 
             return View(model);

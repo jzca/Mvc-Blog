@@ -34,6 +34,7 @@ else
             <tr>
                 <th>Post tile</th>
                 <th>Post body</th>
+                <th>Published<th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -42,25 +43,33 @@ else
         <tbody>
             @foreach (var record in Model)
             {
-                <tr>
-                    <td>@record.Title</td>
+            <tr>
+                <td>@record.Title</td>
+                @if (record.Body.Length >= 80)
+                {
+                    <td>@record.Body.Substring(0, 80) ...</td>
+                }
+                else
+                {
                     <td>@record.Body</td>
+                }
+                <td>@record.Published</td>
+                <td>
+                    <a href="@Url.Action("Detail", "Post", new { id = record.Id})">Detail</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "Post", new { id = record.Id })">Edit</a>
+                </td>
+                @if (User.IsInRole("Admin"))
+                {
                     <td>
-                        <a href="@Url.Action("DetailByTitle", "Post", new { title = record.Title})">Detail</a>
+                        <form method="post" action="@Url.Action("Delete", "Post", new { id = record.Id })">
+                            <a href="#" class="btn-delete">Delete</a>
+                        </form>
                     </td>
-                    <td>
-                        <a href="@Url.Action("Edit", "Post", new { id = record.Id })">Edit</a>
-                    </td>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <td>
-                            <form method="post" action="@Url.Action("Delete", "Post", new { id = record.Id })">
-                                <a href="#" class="btn-delete">Delete</a>
-                            </form>
-                        </td>
-                    }
+                }
 
-                </tr>
+            </tr>
             }
 
         </tbody>

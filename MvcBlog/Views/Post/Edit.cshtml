@@ -29,9 +29,14 @@
         @Html.TextAreaFor(p => p.Body, new { @class = "form-control body-details", placeholder = "Post body", rows = 5, columns = 5 })
     </div>
     <div class="form-group">
-        @Html.LabelFor(p=> p.MediaUrl, "Current Media Name & Location")
+        @Html.LabelFor(p => p.MediaUrl, "Current Media Name & Location")
         <p>@Html.DisplayFor(p => p.MediaUrl)</p>
         <input type="file" name="Media" style="font-size:15px;" />
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Published, "Is Published?")
+        <p><i>@Html.ValueFor(p => p.Published)</i></p>
+        @Html.CheckBoxFor(p => p.Published, new { @class = "checkbox" })
     </div>
     <div class="">
         <button type="submit" class="btn btn-default">Submit</button>
