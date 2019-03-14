@@ -46,9 +46,9 @@ namespace MvcBlog
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
             // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
+            app.UseMicrosoftAccountAuthentication(
+                clientId: "1acd5538-4540-4776-8a94-3f496f3a42e8",
+                clientSecret: "H_4b($#|To$!.$}WbD)GI:[{;Y:s{Bt7(lz^p^ZV[H8!i%A{|[%Q{h]j:");
 
             //app.UseTwitterAuthentication(
             //   consumerKey: "",
@@ -58,11 +58,11 @@ namespace MvcBlog
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "695608062776-nv5tctt8fnfu2dcpor6vjcn7qkc80os3.apps.googleusercontent.com",
+                ClientSecret = "dv2gIXZ15bGuWa2LP4jdvLSe"
+            });
         }
     }
 }
