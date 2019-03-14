@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace PostDatabase.Controllers
 {
@@ -19,6 +20,7 @@ namespace PostDatabase.Controllers
         private string fileExtensionForSavingPost;
 
         private Post postForSavingPost;
+        private Post postForDetail;
 
         public PostController()
         {
@@ -38,7 +40,7 @@ namespace PostDatabase.Controllers
                     Title = p.Title,
                     Body = p.Body,
                     Published = p.Published,
-                    Slug=p.Slug
+                    Slug = p.Slug
                 }).ToList();
 
             return View(model);
@@ -59,8 +61,8 @@ namespace PostDatabase.Controllers
 
         private static string RemoveSpecialCharacters(string str)
         {
-            //             input;match any pattern of a-z and nums;repalce with -;
-            return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled);
+            //             input;match any pattern of a-z and nums;repalce with space;
+            return Regex.Replace(str, "[^a-zA-Z0-9_.]+", " ", RegexOptions.Compiled);
             // medium.com/factory-mind/regex-tutorial-a-simple-cheatsheet-by-examples-649dc1c3f285
             // docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.replace?view=netframework-4.7.2
         }
@@ -104,6 +106,14 @@ namespace PostDatabase.Controllers
                 postForSavingPost = new Post();
                 postForSavingPost.UserId = appUserId;
                 postForSavingPost.DateCreated = DateTime.Now;
+
+                // Make the Slug
+                //RemoveSpecialCharacters
+                var titleRmSpCharEd = RemoveSpecialCharacters(formData.Title).Trim();
+                //Split by space,then Join with dash
+                var formatedSlug = string.Join("-", titleRmSpCharEd.Split(' '));
+                postForSavingPost.Slug = formatedSlug.ToLower();
+
                 DbContext.Posts.Add(postForSavingPost);
             }
             else
@@ -121,29 +131,6 @@ namespace PostDatabase.Controllers
             postForSavingPost.Body = formData.Body;
             postForSavingPost.Published = formData.Published;
             postForSavingPost.DateUpdated = DateTime.Now;
-
-
-                        // Make the Slug
-            var splitedJoinedTitle = string.Join(",", formData.Title.Split(' '));
-            //RemoveSpecialCharacters
-            var titleRmSpCharEd = RemoveSpecialCharacters(splitedJoinedTitle);
-            // Some need info to delete a char in a case
-            var theDash = "-";
-            int firstIndex = 0;
-            int lastIndex = titleRmSpCharEd.Length - 1;
-            char firstOne = titleRmSpCharEd[firstIndex];
-            char lastOne = titleRmSpCharEd[lastIndex];
-
-            if (firstOne.ToString() == theDash)
-            {
-                titleRmSpCharEd = titleRmSpCharEd.Remove(firstIndex,1);
-            }
-            //if (lastOne.ToString() == theDash)
-            //{
-            //    titleRmSpCharEd = titleRmSpCharEd.Remove(lastIndex,1);
-            //}
-
-            postForSavingPost.Slug = titleRmSpCharEd.ToLower();
 
 
             //Handling file upload
@@ -232,18 +219,27 @@ namespace PostDatabase.Controllers
                 return RedirectToAction(nameof(PostController.Index));
 
             var appUserId = User.Identity.GetUserId();
+            var isAdmin = User.IsInRole("Admin");
 
-            var post = DbContext.Posts.FirstOrDefault(p =>
-            p.Id == id.Value);
-            //&&p.UserId == appUserId);
+            if (isAdmin)
+            {
+                postForDetail = DbContext.Posts.FirstOrDefault(p =>
+                    p.Id == id.Value);
+            }
+            else
+            {
+                postForDetail = DbContext.Posts.FirstOrDefault(p =>
+                    p.Published && p.Id == id.Value);
+            }
 
-            if (post == null)
+
+            if (postForDetail == null)
                 return RedirectToAction(nameof(PostController.Index));
 
             var model = new DetailPostViewModel();
-            model.Title = post.Title;
-            model.Body = post.Body;
-            model.MediaUrl = post.MediaUrl;
+            model.Title = postForDetail.Title;
+            model.Body = postForDetail.Body;
+            model.MediaUrl = postForDetail.MediaUrl;
 
             return View(model);
         }
@@ -257,37 +253,29 @@ namespace PostDatabase.Controllers
                 return RedirectToAction(nameof(PostController.Index));
             }
             var appUserId = User.Identity.GetUserId();
+            var isAdmin = User.IsInRole("Admin");
 
-            var post = DbContext.Posts.FirstOrDefault(p =>
-                p.Slug == slug);
+            if (isAdmin)
+            {
+                postForDetail = DbContext.Posts.FirstOrDefault(p =>
+                    p.Slug == slug);
+            }
+            else
+            {
+                postForDetail = DbContext.Posts.FirstOrDefault(p =>
+                    p.Published && p.Slug == slug);
+            }
 
-            if (post == null)
+            if (postForDetail == null)
                 return RedirectToAction(nameof(PostController.Index));
 
             var model = new DetailPostViewModel();
-            model.Title = post.Title;
-            model.Body = post.Body;
-            model.MediaUrl = post.MediaUrl;
+            model.Title = postForDetail.Title;
+            model.Body = postForDetail.Body;
+            model.MediaUrl = postForDetail.MediaUrl;
 
             return View("Detail", model);
         }
 
     }
 }
-
-/*
- 
-        public string Slug
-        {
-            get
-            {
-                return string.Join("-", RmSpeChar(Title).Split(' '));
-            }
-        }
-
-        public static string RmSpeChar(string str)
-        {
-            return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
-        }
-     
-     */
