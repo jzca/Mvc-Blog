@@ -37,6 +37,7 @@ namespace MvcBlog.Controllers
                     Body = p.Body,
                     DateCreated = p.DateCreated,
                     MediaUrl = p.MediaUrl,
+                    Slug = p.Slug
                 }).ToList();
 
             return View(model);

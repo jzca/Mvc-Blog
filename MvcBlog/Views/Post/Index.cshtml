@@ -55,7 +55,7 @@ else
                 }
                 <td>@record.Published</td>
                 <td>
-                    <a href="@Url.Action("Detail", "Post", new { id = record.Id})">Detail</a>
+                    <a href="@Url.Action("DetailBySlug", "Post", new { slug = record.Slug })">Detail</a>
                 </td>
                 <td>
                     <a href="@Url.Action("Edit", "Post", new { id = record.Id })">Edit</a>

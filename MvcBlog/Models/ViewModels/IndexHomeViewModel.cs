@@ -16,5 +16,7 @@ namespace MvcBlog.Models.ViewModels
 
         public DateTime DateCreated { get; set; }
 
+        public string Slug { get; set; }
+
     }
 }

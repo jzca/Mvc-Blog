@@ -31,7 +31,7 @@ else
                                     </div>
                                 }
                                 <div class="post-info">
-                                    <h4><a href="@Url.Action("Detail", "Post" , new { id = record.Id })">@record.Title</a>@record.DateCreated.ToString("HH:mm dddd - MMMM dd yyyy")  / 0 Comments</h4>
+                                    <h4><a href="@Url.Action("DetailBySlug", "Post", new { slug = record.Slug })">@record.Title</a>@record.DateCreated.ToString("HH:mm dddd - MMMM dd yyyy")  / 0 Comments</h4>
                                     @if (record.Body.Length >= 180)
                                     {
                                         <p>@Html.Raw(record.Body.Substring(0, 180)) &#9986;&#9986;&#9986;</p>
@@ -40,7 +40,7 @@ else
                                     {
                                         <p>@Html.Raw(record.Body)</p>
                                     }
-                                    <a href="@Url.Action("Detail", "Post" , new { id = record.Id })"><span></span>READ MORE</a>
+                                    <a href="@Url.Action("DetailBySlug", "Post", new { slug = record.Slug })"><span></span>READ MORE</a>
                                 </div>
                             </div>
                         }
