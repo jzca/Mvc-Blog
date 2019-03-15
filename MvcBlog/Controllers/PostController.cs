@@ -112,7 +112,22 @@ namespace PostDatabase.Controllers
                 var titleRmSpCharEd = RemoveSpecialCharacters(formData.Title).Trim();
                 //Split by space,then Join with dash
                 var formatedSlug = string.Join("-", titleRmSpCharEd.Split(' '));
-                postForSavingPost.Slug = formatedSlug.ToLower();
+                var lowerFormatedSlug = formatedSlug.ToLower();
+                //Check if name repeated
+                var repeatedSlug = DbContext.Posts.FirstOrDefault(
+                    p => p.Slug == lowerFormatedSlug);
+                if (repeatedSlug != null)
+                {
+                    // Create a 4 digit code
+                    var shortCode = GetHashCode().ToString().Substring(0, 4);
+                    // Concat it to the slug
+                    lowerFormatedSlug = $"{lowerFormatedSlug}-{shortCode}";
+                }
+                // End of Make the Slug
+
+                //Saving it
+                postForSavingPost.Slug = lowerFormatedSlug;
+
 
                 DbContext.Posts.Add(postForSavingPost);
             }
