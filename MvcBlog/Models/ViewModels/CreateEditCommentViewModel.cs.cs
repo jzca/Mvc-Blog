@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
 namespace MvcBlog.Models.Domain
 {
-    public class Comment
+    public class CreateEditCommentViewModel
     {
-        public int Id { get; set; }
+        [Required]
         public string Body { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime? DateUpdated { get; set; }
+        [Required]
         public string ReasonUpdated { get; set; }
 
-        public virtual ApplicationUser User { get; set; }
 
     }
 }

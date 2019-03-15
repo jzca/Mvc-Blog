@@ -23,5 +23,13 @@ namespace MvcBlog.Models.Domain
 
         public string Slug { get; set; }
 
+        public virtual List<Comment> Comments { get; set; }
+
+        public Post()
+        {
+            Comments = new List<Comment>();
+        }
+
+
     }
 }

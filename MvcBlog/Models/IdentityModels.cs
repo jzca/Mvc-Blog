@@ -13,11 +13,16 @@ namespace MvcBlog.Models
     public class ApplicationUser : IdentityUser
     {
         public virtual List<Post> Posts { get; set; }
+        public virtual List<Comment> Comments { get; set; }
 
         public ApplicationUser()
         {
             Posts = new List<Post>();
+            Comments = new List<Comment>();
         }
+
+        //public string CommentId { get; set; }
+        //public Comment Comment { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -36,6 +41,7 @@ namespace MvcBlog.Models
         }
 
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         public static ApplicationDbContext Create()
         {

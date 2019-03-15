@@ -61,7 +61,7 @@ namespace PostDatabase.Controllers
 
         private static string RemoveSpecialCharacters(string str)
         {
-            //             input;match any pattern of a-z and nums;repalce with space;
+            // input;replace by matching any pattern of a-z and nums;repalce with space if doesnt match my pattern;
             return Regex.Replace(str, "[^a-zA-Z0-9_.]+", " ", RegexOptions.Compiled);
             // medium.com/factory-mind/regex-tutorial-a-simple-cheatsheet-by-examples-649dc1c3f285
             // docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.replace?view=netframework-4.7.2

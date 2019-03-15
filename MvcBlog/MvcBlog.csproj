@@ -191,6 +191,7 @@
     <Compile Include="Models\Domain\Post.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ViewModels\CreateEditCommentViewModel.cs.cs" />
     <Compile Include="Models\ViewModels\CreateEditPostViewModel.cs" />
     <Compile Include="Models\ViewModels\IndexHomeViewModel.cs" />
     <Compile Include="Models\ViewModels\DetailPostViewModel.cs" />
@@ -393,6 +394,8 @@
     <Content Include="Scripts\tinymce\skins\ui\oxide\fonts\tinymce-mobile.woff" />
     <Content Include="Scripts\tinymce\langs\readme.md" />
     <Content Include="Views\Post\Detail.cshtml" />
+    <Content Include="Views\Comment\Index.cshtml" />
+    <Content Include="Views\Comment\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
