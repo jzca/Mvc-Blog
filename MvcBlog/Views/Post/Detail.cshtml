@@ -19,20 +19,22 @@
 }
 
 <h2>Details</h2>
-
 <p>@Model.Title</p>
-<p>@Html.Raw(Model.Body)</p>
-@if (Model.MediaUrl != null)
-{
-    <div class="row">
-        <div class="col-md-2">
+<div class="single-grid">
+    <div class="col-md-8 single-main">
+        @if (Model.MediaUrl != null)
+        {
             <img class="img-responsive" src="@Url.Content(Model.MediaUrl)" />
-        </div>
+        }
+        <p>@Html.Raw(Model.Body)</p>
     </div>
-}
+    <div class="clearfix"></div>
+</div>
+
 
 @if (Model.Comments.Any() && (User.IsInRole("Admin") || User.IsInRole("Moderator")))
 {
+    <h3>Comment Management</h3>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -63,7 +65,7 @@
         </tbody>
     </table>
 }
-else if(Model.Comments.Any())
+else if (Model.Comments.Any())
 {
     <h3>Comments</h3>
     <ul class="comment-list">
@@ -95,7 +97,8 @@ else if(Model.Comments.Any())
 }
 else
 {
-    <a href="@Url.Action("Login","Account")"></a><h3> Login to leave a comment</h3>
+    <a href="@Url.Action("Login","Account")"></a>
+    <h3> Login to leave a comment</h3>
 }
 
 

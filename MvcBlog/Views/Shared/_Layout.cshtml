@@ -38,6 +38,13 @@
             </div>
             <!---start-top-nav---->
             <div class="top-menu">
+                <div class="search">
+                    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+                    {
+                        <input type="text" name="Text" placeholder="Keyword" />
+                        <input type="submit" value="" />
+                    }
+                </div>
                 <span class="menu"> </span>
                 <ul>
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>

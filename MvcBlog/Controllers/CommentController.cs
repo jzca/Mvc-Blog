@@ -57,7 +57,6 @@ namespace MvcBlog.Controllers
         [Authorize(Roles = "Admin, Moderator")]
         public ActionResult Edit(int? id)
         {
-            var post = DbContext.Posts.FirstOrDefault(p => p.Id == commentForSaving.PostId);
 
             if (!id.HasValue)
             {
@@ -71,7 +70,7 @@ namespace MvcBlog.Controllers
 
             if (comment == null)
             {
-                return RedirectToAction(nameof(PostController.DetailBySlug), "Post", new { slug = post.Slug });
+                return RedirectToAction(nameof(CommentController.Index));
             }
 
             var model = new EditCommentViewModel();

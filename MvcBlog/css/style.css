@@ -37,12 +37,9 @@ ul, label {
 }
 
 .top-menu {
-    display: flex;
-    /*float: left;*/
+    float: left;
     width: 40%;
     margin-top: 25px;
-    /*flex-direction: column;*/
-    /*align-items:flex-end;*/
 }
 
 .search {

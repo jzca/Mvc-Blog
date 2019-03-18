@@ -29,7 +29,7 @@ namespace MvcBlog.Controllers
 
             var model = DbContext.Posts
                 .Where(p => p.Published)
-                .OrderByDescending(p=>p.DateCreated)
+                .OrderByDescending(p => p.DateCreated)
                 .Select(p => new IndexHomeViewModel
                 {
                     Id = p.Id,
@@ -42,6 +42,26 @@ namespace MvcBlog.Controllers
 
             return View(model);
         }
+
+        public ActionResult Search(string text)
+        {
+            var model = DbContext.Posts
+    .Where(p => p.Published &&
+    (p.Title.Contains(text) || p.Slug.Contains(text) || p.Body.Contains(text)))
+    .OrderByDescending(p => p.DateCreated)
+    .Select(p => new IndexHomeViewModel
+    {
+        Id = p.Id,
+        Title = p.Title,
+        Body = p.Body,
+        DateCreated = p.DateCreated,
+        MediaUrl = p.MediaUrl,
+        Slug = p.Slug
+    }).ToList();
+
+            return View("Index", model);
+        }
+
 
         public ActionResult About()
         {
