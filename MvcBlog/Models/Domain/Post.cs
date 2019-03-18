@@ -25,10 +25,10 @@ namespace MvcBlog.Models.Domain
 
         public virtual List<Comment> Comments { get; set; }
 
-        public Post()
-        {
-            Comments = new List<Comment>();
-        }
+        //public Post()
+        //{
+        //    Comments = new List<Comment>();
+        //}
 
 
     }

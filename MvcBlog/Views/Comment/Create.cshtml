@@ -2,8 +2,22 @@
 @{
     ViewBag.Title = "Create";
 }
-
-@Html.LabelFor(p => p.Body)
-@Html.TextAreaFor(p => p.Body)
-@Html.LabelFor(p => p.ReasonUpdated)
-@Html.TextAreaFor(p => p.ReasonUpdated)
+<div class="content-form">
+    <h3>Leave a comment</h3>
+    <form method="post">
+        <div class="form-group">
+            @Html.LabelFor(p => p.Body)
+            @Html.TextAreaFor(p => p.Body, new { @class = "form-control" })
+        </div>
+        @if ( User.IsInRole("Admin") || User.IsInRole("Moderator"))
+        {
+        <div class="form-group">
+            @Html.LabelFor(p => p.ReasonUpdated)
+            @Html.TextAreaFor(p => p.ReasonUpdated, new { @class = "form-control" })
+        </div>
+        }
+        <div class="">
+            <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+    </form>
+</div>

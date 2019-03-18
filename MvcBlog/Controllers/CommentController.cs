@@ -14,10 +14,13 @@ namespace MvcBlog.Controllers
 
         private ApplicationDbContext DbContext;
 
-        private string fileExtensionForSavingPost;
+        private Comment commentForSaving;
+        private Comment commentForDetail;
 
-        private Post postForSavingPost;
-        private Post postForDetail;
+        public CommentController()
+        {
+            DbContext = new ApplicationDbContext();
+        }
 
 
         // GET: Comment
@@ -26,80 +29,73 @@ namespace MvcBlog.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Authorize]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
 
         [HttpPost]
         public ActionResult Create(CreateEditCommentViewModel formData)
         {
-            return SavePost(null, formData);
+            return SaveComment(null, formData);
         }
 
 
-        private ActionResult SavePost(int? id, CreateEditCommentViewModel formData)
+        private ActionResult SaveComment(int? id, CreateEditCommentViewModel formData)
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
 
+            var appUserEm = User.Identity.GetUserName();
             var appUserId = User.Identity.GetUserId();
 
-            //if (DbContext.Posts.Any(p => p.UserId == appUserId &&
-            //(!id.HasValue || p.Id != id.Value)))
-            //{
-            //    ModelState.AddModelError(nameof(CreateEditCommentViewModel.Title),
-            //        "Post title should be unique");
+            if (DbContext.Comments.Any(p => p.UserEmail == appUserEm &&
+            p.Body == formData.Body &&
+            (!id.HasValue || p.Id != id.Value)))
+            {
+                ModelState.AddModelError(nameof(CreateEditCommentViewModel.Body),
+                    "You have already commented this text.");
 
-            //    return View();
-            //}
+                return View();
+            }
 
 
 
             if (!id.HasValue)
             {
-                postForSavingPost = new Post();
-                postForSavingPost.UserId = appUserId;
-                postForSavingPost.DateCreated = DateTime.Now;
+                commentForSaving = new Comment();
+                commentForSaving.DateCreated = DateTime.Now;
+                commentForSaving.UserEmail = appUserEm;
+                commentForSaving.UserId = appUserId;
 
+                //Post.
 
-                DbContext.Posts.Add(postForSavingPost);
+                DbContext.Comments.Add(commentForSaving);
             }
             else
             {
-                postForSavingPost = DbContext.Posts.FirstOrDefault(
-               p => p.Id == id && p.UserId == appUserId);
+                commentForSaving = DbContext.Comments.FirstOrDefault(
+               p => p.Id == id && p.UserEmail == appUserEm);
 
-                if (postForSavingPost == null)
+                if (commentForSaving == null)
                 {
-                    return RedirectToAction(nameof(PostController.Index));
+                    return RedirectToAction(nameof(CommentController.Index));
                 }
             }
 
-            postForSavingPost.Title = formData.Title;
-            postForSavingPost.Body = formData.Body;
-            postForSavingPost.Published = formData.Published;
-            postForSavingPost.DateUpdated = DateTime.Now;
-
-
-            //Handling file upload
-            if (formData.Media != null)
-            {
-                if (!Directory.Exists(ImgHandler.MappedUploadFolder))
-                {
-                    Directory.CreateDirectory(ImgHandler.MappedUploadFolder);
-                }
-
-                var fileName = formData.Media.FileName;
-                var fullPathWithName = ImgHandler.MappedUploadFolder + fileName;
-
-                formData.Media.SaveAs(fullPathWithName);
-
-                postForSavingPost.MediaUrl = ImgHandler.ImgUploadFolder + fileName;
-            }
+            commentForSaving.Body = formData.Body;
+            commentForSaving.ReasonUpdated = formData.ReasonUpdated;
+            commentForSaving.DateUpdated = DateTime.Now;
 
 
             DbContext.SaveChanges();
 
-            return RedirectToAction(nameof(PostController.Index));
+            return RedirectToAction(nameof(CommentController.Index));
         }
     }
     

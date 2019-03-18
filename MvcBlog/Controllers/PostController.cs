@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using MvcBlog;
+using MvcBlog.Controllers;
 using MvcBlog.Models;
 using MvcBlog.Models.Domain;
 using MvcBlog.Models.ViewModels;
@@ -20,6 +21,7 @@ namespace PostDatabase.Controllers
         private string fileExtensionForSavingPost;
 
         private Post postForSavingPost;
+        private Comment commentForSaving;
         private Post postForDetail;
 
         public PostController()
@@ -288,9 +290,69 @@ namespace PostDatabase.Controllers
             model.Title = postForDetail.Title;
             model.Body = postForDetail.Body;
             model.MediaUrl = postForDetail.MediaUrl;
+            model.Comments = postForDetail.Comments;
 
             return View("Detail", model);
         }
 
+        [HttpPost]
+        [Route("blog/{slug}")]
+        public ActionResult DetailBySlug(string slug, CreateEditCommentViewModel formData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var appUserEm = User.Identity.GetUserName();
+            var appUserId = User.Identity.GetUserId();
+
+            //if (DbContext.Comments.Any(p => p.UserEmail == appUserEm &&
+            //p.Body == formData.Body &&
+            //(!id.HasValue || p.Id != id.Value)))
+            //{
+            //    ModelState.AddModelError(nameof(CreateEditCommentViewModel.Body),
+            //        "You have already commented this text.");
+
+            //    return View();
+            //}
+
+            postForDetail = DbContext.Posts.FirstOrDefault(p=> p.Slug == slug);
+
+
+
+            //if (commentForSaving.Post.Id != null)
+            //{
+            //}
+            //else
+            //{
+            //   // commentForSaving = DbContext.Comments.FirstOrDefault(
+            //   //p => p.Id == id && p.UserEmail == appUserEm);
+
+            //   // if (commentForSaving == null)
+            //   // {
+            //   //     return RedirectToAction(nameof(CommentController.Index));
+            //   // }
+            //}
+
+            commentForSaving = new Comment();
+            commentForSaving.DateCreated = DateTime.Now;
+            commentForSaving.UserEmail = appUserEm;
+            commentForSaving.UserId = appUserId;
+            commentForSaving.PostId= postForDetail.Id;
+            commentForSaving.Body = formData.Body;
+            DbContext.Comments.Add(commentForSaving);
+            postForDetail.Comments.Add(commentForSaving);
+
+            //commentForSaving.ReasonUpdated = formData.ReasonUpdated;
+            //commentForSaving.DateUpdated = DateTime.Now;
+
+
+            DbContext.SaveChanges();
+
+            return RedirectToAction(nameof(CommentController.Index));
+
+
+        }
     }
 }

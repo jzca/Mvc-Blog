@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MvcBlog.Models.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -16,8 +17,15 @@ namespace MvcBlog.Models.ViewModels
         public string MediaUrl { get; set; }
 
         public string Slug { get; set; }
+
+        public List<Comment> Comments { get; set; }
         //public bool Published { get; set; }
         //public DateTime DateCreated { get; set; }
         //public DateTime? DateUpdated { get; set; }
+
+        public DetailPostViewModel()
+        {
+            Comments = new List<Comment>();
+        }
     }
 }

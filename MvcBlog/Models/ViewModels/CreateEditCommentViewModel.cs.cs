@@ -10,9 +10,6 @@ namespace MvcBlog.Models.Domain
     {
         [Required]
         public string Body { get; set; }
-        [Required]
         public string ReasonUpdated { get; set; }
-
-
     }
 }
