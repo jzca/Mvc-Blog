@@ -192,7 +192,9 @@
     <Compile Include="Models\Domain\Post.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\ViewModels\CreateEditCommentViewModel.cs.cs" />
+    <Compile Include="Models\ViewModels\CreateEditCommentViewModel.cs" />
+    <Compile Include="Models\ViewModels\IndexCommentViewModel.cs" />
+    <Compile Include="Models\ViewModels\EditCommentViewModel.cs" />
     <Compile Include="Models\ViewModels\CreateEditPostViewModel.cs" />
     <Compile Include="Models\ViewModels\IndexHomeViewModel.cs" />
     <Compile Include="Models\ViewModels\DetailPostViewModel.cs" />
@@ -355,6 +357,7 @@
     <Content Include="Scripts\tinymce\themes\silver\theme.min.js" />
     <Content Include="Scripts\tinymce\tinymce.js" />
     <Content Include="Scripts\tinymce\tinymce.min.js" />
+    <Content Include="Views\Comment\Index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -395,8 +398,8 @@
     <Content Include="Scripts\tinymce\skins\ui\oxide\fonts\tinymce-mobile.woff" />
     <Content Include="Scripts\tinymce\langs\readme.md" />
     <Content Include="Views\Post\Detail.cshtml" />
-    <Content Include="Views\Comment\Index.cshtml" />
     <Content Include="Views\Comment\Create.cshtml" />
+    <Content Include="Views\Comment\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

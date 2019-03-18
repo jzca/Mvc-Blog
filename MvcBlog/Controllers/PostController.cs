@@ -342,7 +342,7 @@ namespace PostDatabase.Controllers
             commentForSaving.PostId= postForDetail.Id;
             commentForSaving.Body = formData.Body;
             DbContext.Comments.Add(commentForSaving);
-            postForDetail.Comments.Add(commentForSaving);
+            //postForDetail.Comments.Add(commentForSaving);
 
             //commentForSaving.ReasonUpdated = formData.ReasonUpdated;
             //commentForSaving.DateUpdated = DateTime.Now;
@@ -350,7 +350,7 @@ namespace PostDatabase.Controllers
 
             DbContext.SaveChanges();
 
-            return RedirectToAction(nameof(CommentController.Index));
+            return RedirectToAction(nameof(PostController.DetailBySlug), new { slug = slug});
 
 
         }

@@ -1,0 +1,31 @@
+﻿@model EditCommentViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h3>Edit comment</h3>
+
+<form method="post">
+    @Html.ValidationSummary(false)
+    <div class="form-group">
+        @Html.LabelFor(p => p.UserEmail, "Author of comment: ")
+        <p>@Html.DisplayFor(p => p.UserEmail)</p>
+    </div>
+    <div class="form-group">
+
+        @Html.LabelFor(p => p.Body, "Comment body")
+        @Html.TextAreaFor(p => p.Body, new { @class = "form-control body-details", placeholder = "Comment body", rows = 5, columns = 5 })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.ReasonUpdated, "Reason to update")
+        @Html.TextAreaFor(p => p.ReasonUpdated, new { @class = "form-control body-details", placeholder = "Reason", rows = 5, columns = 5 })
+    </div>
+    <div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+
+</form>
+
+
+
+

@@ -2,9 +2,20 @@
 @model DetailPostViewModel
 
 @{
-    /**/
-
     ViewBag.Title = "Detail";
+}
+
+
+@section scripts  {
+    <script>
+        $(function () {
+            $(".btn-delete-cm").on('click', function (e) {
+                e.preventDefault();
+                $(this).closest('form').submit();
+            });
+        });
+
+    </script>
 }
 
 <h2>Details</h2>
@@ -20,7 +31,41 @@
     </div>
 }
 
-<h3>Comments</h3>
+@if (Model.Comments.Any() && (User.IsInRole("Admin") || User.IsInRole("Moderator")))
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Comment Author</th>
+                <th>Comment body</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cm in Model.Comments)
+            {
+                <tr>
+                    <td>@cm.UserEmail</td>
+                    <td>@cm.Body</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Comment", new {id = cm.Id})">Edit</a>
+                    </td>
+                    <td>
+                        <form method="post" action="@Url.Action("Delete", "Comment", new {id = cm.Id, slug=Model.Slug})">
+                            <a href="#" class="btn-delete-cm">Delete</a>
+                        </form>
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else if(Model.Comments.Any())
+{
+    <h3>Comments</h3>
     <ul class="comment-list">
         @foreach (var cm in Model.Comments)
         {
@@ -31,19 +76,34 @@
 
         }
     </ul>
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="content-form">
+        <h3>Leave a comment</h3>
+        <form method="post">
+            <div class="form-group">
+                @Html.LabelFor(p => p.Body)
+                <textarea placeholder="Comments" name="Body"></textarea>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </form>
+    </div>
+}
+else
+{
+    <a href="@Url.Action("Login","Account")"></a><h3> Login to leave a comment</h3>
+}
 
 
-
-
-<div class="content-form">
-    <h3>Leave a comment</h3>
-    <form method="post">
-        <div class="form-group">
-            @Html.LabelFor(p => p.Body)
-            <textarea placeholder="Comments" name="Body" id="@Model.Slug"></textarea>
-        </div>
-        <div>
-            <button type="submit" class="btn btn-default">Submit</button>
-        </div>
-    </form>
-</div>
+@*@if (cm.Body.Length >= 20)
+    {
+        <td>@cm.Body.Substring(0, 20) ...</td>
+    }
+    else
+    {
+        <td>@cm.Body</td>
+    }*@
