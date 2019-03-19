@@ -7,6 +7,8 @@
 
 
 @section scripts  {
+    @Scripts.Render("~/bundles/jqueryval")
+
     <script>
         $(function () {
             $(".btn-delete-cm").on('click', function (e) {
@@ -40,6 +42,7 @@
             <tr>
                 <th>Comment Author</th>
                 <th>Comment body</th>
+                <th>Reason to Update</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -50,6 +53,14 @@
                 <tr>
                     <td>@cm.UserEmail</td>
                     <td>@cm.Body</td>
+                    @if (cm.ReasonUpdated != null)
+                    {
+                        <td>@cm.ReasonUpdated</td>
+                    }
+                    else
+                    {
+                        <td>No Updates yet</td>
+                    }
                     <td>
                         <a href="@Url.Action("Edit", "Comment", new {id = cm.Id})">Edit</a>
                     </td>
@@ -82,6 +93,7 @@ else if (Model.Comments.Any())
 
 @if (User.Identity.IsAuthenticated)
 {
+    @Html.ValidationSummary(false);
     <div class="content-form">
         <h3>Leave a comment</h3>
         <form method="post">
@@ -97,16 +109,8 @@ else if (Model.Comments.Any())
 }
 else
 {
-    <a href="@Url.Action("Login","Account")"></a>
-    <h3> Login to leave a comment</h3>
+    <a href="@Url.Action("Login","Account")">
+        <h3> Login to leave a comment</h3>
+    </a>
+
 }
-
-
-@*@if (cm.Body.Length >= 20)
-    {
-        <td>@cm.Body.Substring(0, 20) ...</td>
-    }
-    else
-    {
-        <td>@cm.Body</td>
-    }*@

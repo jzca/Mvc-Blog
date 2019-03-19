@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using MvcBlog.Models;
+using MvcBlog.Models.Domain;
 using MvcBlog.Models.ViewModels;
 using PostDatabase.Controllers;
 using System;
@@ -14,6 +15,7 @@ namespace MvcBlog.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext DbContext;
+        private List<IndexHomeViewModel> modelGlobal;
 
         public HomeController()
         {
@@ -24,10 +26,7 @@ namespace MvcBlog.Controllers
         {
             ViewBag.Message = "Your home page.";
 
-            //var appUserId = User.Identity.GetUserId();
-            //.Where(p => p.UserId == appUserId)
-
-            var model = DbContext.Posts
+            modelGlobal = DbContext.Posts
                 .Where(p => p.Published)
                 .OrderByDescending(p => p.DateCreated)
                 .Select(p => new IndexHomeViewModel
@@ -37,29 +36,55 @@ namespace MvcBlog.Controllers
                     Body = p.Body,
                     DateCreated = p.DateCreated,
                     MediaUrl = p.MediaUrl,
-                    Slug = p.Slug
+                    Slug = p.Slug,
+                    Comments2 = p.Comments
                 }).ToList();
 
-            return View(model);
+            return View(modelGlobal);
         }
 
         public ActionResult Search(string text)
         {
-            var model = DbContext.Posts
-    .Where(p => p.Published &&
-    (p.Title.Contains(text) || p.Slug.Contains(text) || p.Body.Contains(text)))
-    .OrderByDescending(p => p.DateCreated)
-    .Select(p => new IndexHomeViewModel
-    {
-        Id = p.Id,
-        Title = p.Title,
-        Body = p.Body,
-        DateCreated = p.DateCreated,
-        MediaUrl = p.MediaUrl,
-        Slug = p.Slug
-    }).ToList();
+            if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+            {
+                modelGlobal = DbContext.Posts
+                    .Where(p => 
+                    p.Title.Contains(text) || p.Slug.Contains(text) || p.Body.Contains(text))
+                    .OrderByDescending(p => p.DateCreated)
+                    .Select(p => new IndexHomeViewModel
+                    {
+                        Id = p.Id,
+                        Title = p.Title,
+                        Body = p.Body,
+                        DateCreated = p.DateCreated,
+                        MediaUrl = p.MediaUrl,
+                        Slug = p.Slug,
+                    }).ToList();
+            }
+            else
+            {
+                modelGlobal = DbContext.Posts
+                     .Where(p => p.Published &&
+                     (p.Title.Contains(text) || p.Slug.Contains(text) || p.Body.Contains(text)))
+                     .OrderByDescending(p => p.DateCreated)
+                     .Select(p => new IndexHomeViewModel
+                     {
+                         Id = p.Id,
+                         Title = p.Title,
+                         Body = p.Body,
+                         DateCreated = p.DateCreated,
+                         MediaUrl = p.MediaUrl,
+                         Slug = p.Slug
+                     }).ToList();
+            }
+            if (!modelGlobal.Any())
+            {
+                return View();
+            }
 
-            return View("Index", model);
+
+
+            return View(nameof(HomeController.Index), modelGlobal);
         }
 
 

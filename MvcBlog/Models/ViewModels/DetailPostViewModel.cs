@@ -12,6 +12,10 @@ namespace MvcBlog.Models.ViewModels
         public string Title { get; set; }
         public string Body { get; set; }
 
+        //public string CommentBody { get{
+        //        CommentBody=
+        //    }; }
+
         public string MediaUrl { get; set; }
 
         public string Slug { get; set; }

@@ -25,6 +25,7 @@ namespace MvcBlog.Controllers
 
 
         // GET: Comment
+        [Authorize]
         public ActionResult Index()
         {
             return View();
@@ -34,7 +35,7 @@ namespace MvcBlog.Controllers
         [Authorize(Roles = "Admin, Moderator")]
         public ActionResult Delete(int? id, string slug)
         {
-        
+
             if (!id.HasValue)
             {
                 return RedirectToAction(nameof(CommentController.Index));
@@ -50,7 +51,7 @@ namespace MvcBlog.Controllers
                 DbContext.SaveChanges();
             }
 
-            return RedirectToAction(nameof(PostController.DetailBySlug),"Post", new { slug = slug });
+            return RedirectToAction(nameof(PostController.DetailBySlug), "Post", new { slug = slug });
         }
 
         [HttpGet]
@@ -93,45 +94,25 @@ namespace MvcBlog.Controllers
             var appUserEm = User.Identity.GetUserName();
             var appUserId = User.Identity.GetUserId();
 
-            //if (DbContext.Comments.Any(p => p.UserEmail == appUserEm &&
-            //p.Body == formData.Body &&
-            //(!id.HasValue || p.Id != id.Value)))
-            //{
-            //    ModelState.AddModelError(nameof(CreateEditCommentViewModel.Body),
-            //        "You have already commented this text.");
+            if (DbContext.Comments.Any(p => p.Body == formData.Body && p.Id != id))
+            {
+                ModelState.AddModelError(nameof(CreateEditCommentViewModel.Body),
+                    "The comment you edit is the same one as it is!");
 
-            //    return View();
-            //}
-                commentForSaving = DbContext.Comments.FirstOrDefault(
+                return View();
+            }
+            commentForSaving = DbContext.Comments.FirstOrDefault(
                 p => p.Id == id);
             var post = DbContext.Posts.FirstOrDefault(p => p.Id == commentForSaving.PostId);
-
-
-
-            //if (commentForSaving.Post.Id != null)
-            //{
-            //}
-            //else
-            //{
-            //   // commentForSaving = DbContext.Comments.FirstOrDefault(
-            //   //p => p.Id == id && p.UserEmail == appUserEm);
-
-            //   // if (commentForSaving == null)
-            //   // {
-            //   //     return RedirectToAction(nameof(CommentController.Index));
-            //   // }
-            //}
-
 
             commentForSaving.DateUpdated = DateTime.Now;
             commentForSaving.Body = formData.Body;
             commentForSaving.ReasonUpdated = formData.ReasonUpdated;
-            //DbContext.Comments.Add(commentForSaving);
-            //postForDetail.Comments.Add(commentForSaving);
 
-            //commentForSaving.ReasonUpdated = formData.ReasonUpdated;
-            //commentForSaving.DateUpdated = DateTime.Now;
-
+            if (commentForSaving == null)
+            {
+                return RedirectToAction(nameof(CommentController.Index));
+            }
 
             DbContext.SaveChanges();
 
@@ -222,5 +203,5 @@ namespace MvcBlog.Controllers
             return RedirectToAction(nameof(CommentController.Index));
         }
     }
-    
+
 }

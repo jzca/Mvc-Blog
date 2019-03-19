@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MvcBlog.Models.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -19,6 +20,13 @@ namespace MvcBlog.Models.ViewModels
         public DateTime DateCreated { get; set; }
 
         public string Slug { get; set; }
+
+        public List<Comment> Comments2 { get; set; }
+
+        public IndexHomeViewModel()
+        {
+            Comments2 = new List<Comment>();
+        }
 
     }
 }

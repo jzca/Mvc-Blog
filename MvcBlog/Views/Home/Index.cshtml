@@ -1,8 +1,6 @@
 ﻿@model List<IndexHomeViewModel>
 
 @{
-    /**/
-
     ViewBag.Title = "Home Page";
 }
 
@@ -60,7 +58,10 @@ else
                     <div class="comments">
                         <h3>RECENT COMMENTS</h3>
                         <ul>
-                            <li><a href="#">Not Available(Person name)</a> on <a href="#">Not Available(Title)</a></li>
+                            @*@foreach (var com in Model)
+                            {
+                                <li> on <a href="@Url.Action("DetailBySlug", "Post", new {})">Not Available(Title)</a></li>
+                            }*@
 
                         </ul>
                     </div>
@@ -72,12 +73,6 @@ else
                             {
                                 <li><a href="@Url.Action("DetailBySlug", "Post", new { slug = record.Slug })">@record.DateCreated.ToString("HH:mm dddd - MMMM dd yyyy")</a></li>
                             }
-                        </ul>
-                    </div>
-                    <div class="categories">
-                        <h3>CATEGORIES</h3>
-                        <ul>
-                            <li><a href="#">Not Available</a></li>
                         </ul>
                     </div>
                     <div class="clearfix"></div>
