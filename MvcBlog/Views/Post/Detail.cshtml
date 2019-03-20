@@ -21,9 +21,9 @@
 }
 <hr />
 <div class="page-detail">
-    <h3>@Model.Title</h3>
+    <h3 class="title-detail">@Model.Title</h3>
     <div class="single-grid">
-        <div class="col-md-8 single-main">
+        <div class="col-md-6 single-main">
             @if (Model.MediaUrl != null)
             {
                 <img class="img-responsive" src="@Url.Content(Model.MediaUrl)" />

@@ -1102,7 +1102,11 @@ ul.comment-list img {
     margin-left: 8%;
 }
 
-.page-detail{
+.page-detail {
     margin-left: 90px;
     margin-right: 60px;
+}
+
+.title-detail {
+    margin-bottom: 20px;
 }
