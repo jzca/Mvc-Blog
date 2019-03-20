@@ -99,12 +99,24 @@ namespace PostDatabase.Controllers
                 postForSavingPost.DateCreated = DateTime.Now;
 
                 // Make the Slug
-                //RemoveSpecialCharacters
+                // RemoveSpecialCharacters
                 var titleRmSpCharEd = RemoveSpecialCharacters(formData.Title).Trim();
-                //Split by space,then Join with dash
+                // Split by space,then Join with dash
+
                 var formatedSlug = string.Join("-", titleRmSpCharEd.Split(' '));
+
                 var lowerFormatedSlug = formatedSlug.ToLower();
-                //Check if name repeated
+                
+                // If Slug is empty
+                if(!lowerFormatedSlug.Any())
+                {
+                    // Create a 6 digit code
+                    var longCode = GetHashCode().ToString().Substring(0, 6);
+                    // Concat it to the slug
+                    lowerFormatedSlug = $"{longCode}";
+                }
+
+                // Check if name repeated
                 var repeatedSlug = DbContext.Posts.FirstOrDefault(
                     p => p.Slug == lowerFormatedSlug);
                 if (repeatedSlug != null)

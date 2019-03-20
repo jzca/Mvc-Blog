@@ -62,7 +62,7 @@ namespace MvcBlog.Controllers
 
             if (!id.HasValue)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction(nameof(CommentController.Index));
             }
 
             var comment = DbContext.Comments.FirstOrDefault(
@@ -79,7 +79,11 @@ namespace MvcBlog.Controllers
             model.ReasonUpdated = comment.ReasonUpdated;
             model.UserEmail = comment.UserEmail;
             model.DateCreated = comment.DateCreated;
+
+            if(comment.DateUpdated != null)
+            {
             model.DateUpdated = comment.DateUpdated;
+            }
 
             return View(model);
         }
@@ -92,18 +96,6 @@ namespace MvcBlog.Controllers
             {
                 return View();
             }
-
-            //var appUserEm = User.Identity.GetUserName();
-            //var appUserId = User.Identity.GetUserId();
-
-            if (DbContext.Comments.Any(p => p.Body == formData.Body && p.Id != id))
-            {
-                ModelState.AddModelError(nameof(EditCommentViewModel.Body),
-                    "The comment you edit is the same one as it is!");
-
-                return View();
-            }
-
 
             commentForSaving = DbContext.Comments.FirstOrDefault(
                 p => p.Id == id);

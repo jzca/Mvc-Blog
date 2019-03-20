@@ -7,10 +7,13 @@
 
 <form method="post">
     @Html.ValidationSummary(false)
-    <div class="form-group">
-        @Html.LabelFor(p => p.DateCreated, "Created Date: ")
-        <p>@Html.DisplayFor(p => p.DateCreated)</p>
-    </div>
+    @if (Model != null)
+    {
+        <div class="form-group">
+            @Html.LabelFor(p => p.DateCreated, "Created Date: ")
+            <p>@Html.DisplayFor(p => p.DateCreated)</p>
+        </div>
+    }
     <div class="form-group">
         @Html.LabelFor(p => p.UserEmail, "Author of comment: ")
         <p>@Html.DisplayFor(p => p.UserEmail)</p>
@@ -20,12 +23,12 @@
         @Html.LabelFor(p => p.Body, "Comment body")
         @Html.TextAreaFor(p => p.Body, new { @class = "form-control body-details", placeholder = "Comment body", rows = 5, columns = 5 })
     </div>
-    @if (Model.DateUpdated != null)
+    @if (Model != null && Model.DateUpdated != null)
     {
-    <div class="form-group">
-        @Html.LabelFor(p => p.DateUpdated, "Updated Date: ")
-        <p>@Html.DisplayFor(p => p.DateUpdated)</p>
-    </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.DateUpdated, "Updated Date: ")
+            <p>@Html.DisplayFor(p => p.DateUpdated)</p>
+        </div>
     }
     <div class="form-group">
         @Html.LabelFor(p => p.ReasonUpdated, "Reason to update")
