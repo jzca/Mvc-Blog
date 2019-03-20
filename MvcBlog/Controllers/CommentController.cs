@@ -5,6 +5,8 @@ using PostDatabase.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 
@@ -37,7 +39,7 @@ namespace MvcBlog.Controllers
 
             if (!id.HasValue)
             {
-                return RedirectToAction(nameof(CommentController.Index));
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             var appUserId = User.Identity.GetUserId();
@@ -60,17 +62,15 @@ namespace MvcBlog.Controllers
 
             if (!id.HasValue)
             {
-                return RedirectToAction(nameof(CommentController.Index));
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            var appUserId = User.Identity.GetUserId();
 
             var comment = DbContext.Comments.FirstOrDefault(
                 p => p.Id == id.Value);
 
             if (comment == null)
             {
-                return RedirectToAction(nameof(CommentController.Index));
+                return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed);
             }
 
             var model = new EditCommentViewModel();
@@ -78,6 +78,8 @@ namespace MvcBlog.Controllers
             model.Body = comment.Body;
             model.ReasonUpdated = comment.ReasonUpdated;
             model.UserEmail = comment.UserEmail;
+            model.DateCreated = comment.DateCreated;
+            model.DateUpdated = comment.DateUpdated;
 
             return View(model);
         }
@@ -101,6 +103,8 @@ namespace MvcBlog.Controllers
 
                 return View();
             }
+
+
             commentForSaving = DbContext.Comments.FirstOrDefault(
                 p => p.Id == id);
             var post = DbContext.Posts.FirstOrDefault(p => p.Id == commentForSaving.PostId);
@@ -111,7 +115,8 @@ namespace MvcBlog.Controllers
 
             if (commentForSaving == null)
             {
-                return RedirectToAction(nameof(CommentController.Index));
+                return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed);
+                //return RedirectToAction(nameof(CommentController.Index));
             }
 
             DbContext.SaveChanges();

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -307,7 +308,7 @@ namespace PostDatabase.Controllers
 
             if (commentForSaving == null)
             {
-                return RedirectToAction(nameof(CommentController.Index), nameof(CommentController).Substring(0, 7));
+                return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed);
             }
 
             DbContext.Comments.Add(commentForSaving);

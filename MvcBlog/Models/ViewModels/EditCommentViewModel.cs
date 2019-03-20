@@ -13,5 +13,7 @@ namespace MvcBlog.Models.Domain
         [Required]
         public string ReasonUpdated { get; set; }
         public string UserEmail { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateUpdated { get; set; }
     }
 }

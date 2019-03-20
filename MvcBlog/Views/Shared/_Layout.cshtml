@@ -39,7 +39,7 @@
             <!---start-top-nav---->
             <div class="top-menu">
                 <div class="search">
-                    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+                    @using (Html.BeginForm("Search", "Home", FormMethod.Get))
                     {
                         <input type="text" name="Text" placeholder="Keyword" />
                         <input type="submit" value="" />
