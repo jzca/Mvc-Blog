@@ -34,7 +34,6 @@ namespace PostDatabase.Controllers
             var appUserId = User.Identity.GetUserId();
 
             var model = DbContext.Posts
-                .Where(p => p.UserId == appUserId)
                 .OrderBy(p => p.Published)
                 .Select(p => new IndexPostViewModel
                 {
@@ -56,6 +55,7 @@ namespace PostDatabase.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create(CreateEditPostViewModel formData)
         {
             return SavePost(null, formData);
@@ -77,18 +77,6 @@ namespace PostDatabase.Controllers
             }
 
             var appUserId = User.Identity.GetUserId();
-
-            if (DbContext.Posts.Any(p => p.UserId == appUserId &&
-            p.Title == formData.Title &&
-            (!id.HasValue || p.Id != id.Value)))
-            {
-                ModelState.AddModelError(nameof(CreateEditPostViewModel.Title),
-                    "Post title should be unique");
-
-                return View();
-            }
-
-
 
             //Validating file upload
             if (formData.Media != null)
@@ -138,6 +126,8 @@ namespace PostDatabase.Controllers
                 postForSavingPost = DbContext.Posts.FirstOrDefault(
                p => p.Id == id && p.UserId == appUserId);
 
+                postForSavingPost.DateUpdated = DateTime.Now;
+
                 if (postForSavingPost == null)
                 {
                     return RedirectToAction(nameof(PostController.Index));
@@ -147,7 +137,6 @@ namespace PostDatabase.Controllers
             postForSavingPost.Title = formData.Title;
             postForSavingPost.Body = formData.Body;
             postForSavingPost.Published = formData.Published;
-            postForSavingPost.DateUpdated = DateTime.Now;
 
 
             //Handling file upload
@@ -202,6 +191,7 @@ namespace PostDatabase.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int id, CreateEditPostViewModel formData)
         {
             return SavePost(id, formData);
@@ -216,15 +206,7 @@ namespace PostDatabase.Controllers
                 return RedirectToAction(nameof(PostController.Index));
             }
 
-            var appUserId = User.Identity.GetUserId();
-
-            var Post = DbContext.Posts.FirstOrDefault(p => p.Id == id && p.UserId == appUserId);
-
-            //while (Post.Comments.Any())
-            //{
-            //var commentToRm = DbContext.Comments.FirstOrDefault(p => p.PostId == id);
-            //    DbContext.Comments.RemoveRange(Post.Comments);
-            //}
+            var Post = DbContext.Posts.FirstOrDefault(p => p.Id == id);
 
             if (Post != null)
             {
@@ -304,27 +286,17 @@ namespace PostDatabase.Controllers
 
         [HttpPost]
         [Route("blog/{slug}")]
-        public ActionResult DetailBySlug(string slug, CreateEditCommentViewModel formData)
+        public ActionResult DetailBySlug(string slug, CreateCommentViewModel formData)
         {
             if (!ModelState.IsValid)
             {
-
-                return RedirectToAction(nameof(CommentController.Index), "Comment");
+                return RedirectToAction(nameof(PostController.DetailBySlug), "Post", new { slug = slug });
             }
 
             var appUserEm = User.Identity.GetUserName();
             var appUserId = User.Identity.GetUserId();
 
             postForDetail = DbContext.Posts.FirstOrDefault(p => p.Slug == slug);
-
-            if (DbContext.Comments.Any(p => p.UserEmail == appUserEm &&
-            p.Body == formData.Body))
-            {
-                //ModelState.AddModelError(nameof(CreateEditCommentViewModel.Body),
-                //    "You have already commented this text.");
-                return RedirectToAction(nameof(CommentController.Index), nameof(CommentController).Substring(0, 7));
-            }
-
 
             commentForSaving = new Comment();
             commentForSaving.DateCreated = DateTime.Now;
@@ -335,7 +307,7 @@ namespace PostDatabase.Controllers
 
             if (commentForSaving == null)
             {
-                return RedirectToAction(nameof(CommentController.Index), nameof(CommentController).Substring(0,7));
+                return RedirectToAction(nameof(CommentController.Index), nameof(CommentController).Substring(0, 7));
             }
 
             DbContext.Comments.Add(commentForSaving);

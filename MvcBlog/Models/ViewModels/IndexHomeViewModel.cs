@@ -21,12 +21,7 @@ namespace MvcBlog.Models.ViewModels
 
         public string Slug { get; set; }
 
-        public List<Comment> Comments2 { get; set; }
-
-        public IndexHomeViewModel()
-        {
-            Comments2 = new List<Comment>();
-        }
+        public int AmtComment { get; set; }
 
     }
 }

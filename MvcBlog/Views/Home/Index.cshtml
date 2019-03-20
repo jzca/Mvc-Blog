@@ -29,7 +29,7 @@ else
                                     </div>
                                 }
                                 <div class="post-info">
-                                    <h4><a href="@Url.Action("DetailBySlug", "Post", new { slug = record.Slug })">@record.Title</a>@record.DateCreated.ToString("HH:mm dddd - MMMM dd yyyy")  / 0 Comments</h4>
+                                    <h4><a href="@Url.Action("DetailBySlug", "Post", new { slug = record.Slug })">@record.Title</a>@record.DateCreated.ToString("HH:mm dddd - MMMM dd yyyy")  / @record.AmtComment Comments</h4>
                                     @if (record.Body.Length >= 180)
                                     {
                                         <p>@Html.Raw(record.Body.Substring(0, 180)) &#9986;&#9986;&#9986;</p>
@@ -53,16 +53,6 @@ else
                             {
                                 <li><a href="@Url.Action("Detail", "Post" , new { id = record.Id })">@record.Title</a></li>
                             }
-                        </ul>
-                    </div>
-                    <div class="comments">
-                        <h3>RECENT COMMENTS</h3>
-                        <ul>
-                            @*@foreach (var com in Model)
-                            {
-                                <li> on <a href="@Url.Action("DetailBySlug", "Post", new {})">Not Available(Title)</a></li>
-                            }*@
-
                         </ul>
                     </div>
                     <div class="clearfix"></div>

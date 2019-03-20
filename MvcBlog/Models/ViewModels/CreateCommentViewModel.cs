@@ -6,7 +6,7 @@ using System.Web;
 
 namespace MvcBlog.Models.Domain
 {
-    public class CreateEditCommentViewModel
+    public class CreateCommentViewModel
     {
         [Required]
         public string Body { get; set; }

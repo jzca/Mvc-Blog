@@ -10,11 +10,8 @@ namespace MvcBlog.Models.ViewModels
     public class DetailPostViewModel
     {
         public string Title { get; set; }
-        public string Body { get; set; }
 
-        //public string CommentBody { get{
-        //        CommentBody=
-        //    }; }
+        public string Body { get; set; }
 
         public string MediaUrl { get; set; }
 

@@ -37,7 +37,7 @@ namespace MvcBlog.Controllers
                     DateCreated = p.DateCreated,
                     MediaUrl = p.MediaUrl,
                     Slug = p.Slug,
-                    Comments2 = p.Comments
+                    AmtComment = p.Comments.Count()
                 }).ToList();
 
             return View(modelGlobal);
