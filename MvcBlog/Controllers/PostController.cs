@@ -125,7 +125,7 @@ namespace PostDatabase.Controllers
             else
             {
                 postForSavingPost = DbContext.Posts.FirstOrDefault(
-               p => p.Id == id && p.UserId == appUserId);
+               p => p.Id == id);
 
                 postForSavingPost.DateUpdated = DateTime.Now;
 
@@ -171,10 +171,8 @@ namespace PostDatabase.Controllers
                 return RedirectToAction(nameof(PostController.Index));
             }
 
-            var appUserId = User.Identity.GetUserId();
-
             var post = DbContext.Posts.FirstOrDefault(
-                p => p.Id == id.Value && p.UserId == appUserId);
+                p => p.Id == id.Value);
 
             if (post == null)
             {

@@ -109,6 +109,30 @@ namespace MvcBlog.Migrations
                 roleManager.Create(modRole);
             }
 
+            // Admin2
+            if (!context.Users.Any(
+                p => p.UserName == "admin2@blog.com"))
+            {
+                adminUser = new ApplicationUser();
+                adminUser.UserName = "admin2@blog.com";
+                adminUser.Email = "admin2@blog.com";
+
+                userManager.Create(adminUser, "Password-1");
+            }
+            else
+            {
+                adminUser = context
+                    .Users
+                    .First(p => p.UserName == "admin2@blog.com");
+            }
+
+            //Make sure the user is on the admin role
+            if (!userManager.IsInRole(adminUser.Id, "Admin"))
+            {
+                userManager.AddToRole(adminUser.Id, "Admin");
+            }
+
+
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
