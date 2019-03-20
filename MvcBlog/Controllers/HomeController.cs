@@ -45,7 +45,7 @@ namespace MvcBlog.Controllers
 
         public ActionResult Search(string text)
         {
-            if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+            if (User.IsInRole("Admin"))
             {
                 modelGlobal = DbContext.Posts
                     .Where(p => 
